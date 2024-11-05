@@ -4,7 +4,7 @@ import com.ssafy.tripgg.domain.auth.dto.OAuthLoginResponse;
 import com.ssafy.tripgg.domain.user.entity.Provider;
 import com.ssafy.tripgg.domain.user.entity.User;
 import com.ssafy.tripgg.domain.user.repository.UserRepository;
-import com.ssafy.tripgg.global.jwt.JwtTokenProvider;
+import com.ssafy.tripgg.global.config.jwt.JwtTokenProvider;
 import com.ssafy.tripgg.infra.oauth.client.KakaoOAuthClient;
 import com.ssafy.tripgg.infra.oauth.dto.KakaoTokenResponse;
 import com.ssafy.tripgg.infra.oauth.dto.KakaoUserResponse;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @Service

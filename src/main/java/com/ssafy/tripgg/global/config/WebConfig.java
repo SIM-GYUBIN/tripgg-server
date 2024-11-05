@@ -5,7 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration
+//@Configuration
+//spring security(SecurityConfig)에서 cors와 인증 인가 주고 있음
 public class WebConfig implements WebMvcConfigurer {
 
     @Value("${app.url.front}")
@@ -13,10 +14,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**") // 모든 경로에 대해
-                .allowedOrigins(frontUrl) // Vue.js 애플리케이션의 주소
+        registry.addMapping("/api/**")
+                .allowedOrigins(frontUrl)
                 .allowedMethods("GET", "POST")
-                .allowedHeaders("*")
+                .allowedHeaders("Authorization", "Content-Type", "X-Requested-With")
                 .allowCredentials(true)
                 .maxAge(3600);
     }

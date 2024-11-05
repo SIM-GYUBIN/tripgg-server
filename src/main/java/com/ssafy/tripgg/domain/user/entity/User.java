@@ -16,9 +16,6 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String nickname;
 
-    @Column
-    private String email;
-
     @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private Provider provider;    // enum으로 변경
@@ -33,10 +30,9 @@ public class User extends BaseEntity {
     private Integer totalPoints;
 
     @Builder
-    public User(String nickname, String email, Provider provider, String providerId,
+    public User(String nickname, Provider provider, String providerId,
                 String profileImageUrl) {
         this.nickname = nickname;
-        this.email = email;
         this.provider = provider;
         this.providerId = providerId;
         this.profileImageUrl = profileImageUrl;

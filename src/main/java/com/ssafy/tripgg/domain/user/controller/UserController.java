@@ -20,4 +20,12 @@ public class UserController {
 
         return ApiResponse.success(userService.findById(userId));
     }
+
+    @DeleteMapping("/me")
+    public ApiResponse<String> deleteUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        Long userId = userPrincipal.getId();
+        userService.deleteById(userId);
+
+        return ApiResponse.success("회원 탈퇴가 완료되었습니다.");
+    }
 }

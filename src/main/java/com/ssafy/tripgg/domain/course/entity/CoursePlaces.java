@@ -11,7 +11,11 @@ import lombok.NoArgsConstructor;
 @Table(name = "course_places")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CoursePlaces extends BaseEntity {
+public class CoursePlaces {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)

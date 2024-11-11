@@ -21,7 +21,7 @@ public class Course extends BaseEntity {
     private String description;
 
     @Column(nullable = false)
-    private Integer region_id;
+    private Integer regionId;
 
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;

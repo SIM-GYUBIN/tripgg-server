@@ -20,8 +20,9 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping("/all")
-    public ApiResponse<List<AllCourseResponse>> getAllCourses(@Valid CourseRequest courseRequest) {
+    public ApiResponse<List<AllCourseResponse>> getAllCourses(CourseRequest courseRequest) {
 
+        System.out.println(courseRequest);
         return ApiResponse.success(courseService.getAllCourse(courseRequest));
     }
 }

@@ -25,7 +25,7 @@ public class CourseService {
 
         Integer regionCode = courseRequest.getRegion() == Region.ALL
                 ? null
-                : courseRequest.getRegion().ordinal();
+                : courseRequest.getRegion().getCode();
 
         // 기본 페이징
         Pageable pageable = PageRequest.of(
@@ -33,6 +33,8 @@ public class CourseService {
                 courseRequest.getSize()
         );
 
+
+        log.info("regionCode: {}, orderType: {}", regionCode, courseRequest.getOrder().name());
 
         List<Course> allCourse = courseRepository.findAllCourseByCondition(regionCode, courseRequest.getOrder().name(), pageable)
                 .getContent();

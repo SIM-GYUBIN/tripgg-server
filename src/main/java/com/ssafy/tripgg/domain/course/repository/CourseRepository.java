@@ -11,14 +11,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
-    @Query("SELECT c, COUNT(cp.id) as progressCount " +
-            "FROM Course c " +
+    @Query("SELECT c FROM Course c " +
             "LEFT JOIN CourseProgress cp ON c.id = cp.course.id " +
-            "WHERE (:regionCode IS NULL OR c.region_id = :regionCode) " +
+            "WHERE (:regionCode IS NULL OR c.regionId = :regionCode) " +
             "GROUP BY c " +
             "ORDER BY " +
-            "CASE WHEN :orderType = 'LATEST' THEN c.createdAt END DESC, " +
-            "CASE WHEN :orderType = 'POPULAR' THEN progressCount END DESC")
+            "CASE WHEN (:orderType = 'LATEST') THEN c.createdAt " +
+            "     WHEN (:orderType = 'POPULAR') THEN COUNT(cp.id) " +
+            "END DESC")
     Page<Course> findAllCourseByCondition(
             @Param("regionCode") Integer regionCode,
             @Param("orderType") String orderType,

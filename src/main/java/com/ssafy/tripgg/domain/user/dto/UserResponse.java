@@ -5,7 +5,6 @@ import lombok.*;
 
 @Getter
 @Builder
-@ToString @EqualsAndHashCode
 public class UserResponse {
     private Long id;
     private String nickname;

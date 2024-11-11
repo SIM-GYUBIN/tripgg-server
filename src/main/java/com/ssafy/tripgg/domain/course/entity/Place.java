@@ -1,9 +1,10 @@
 package com.ssafy.tripgg.domain.course.entity;
 
-import com.ssafy.tripgg.domain.course.entity.enums.Region;
 import com.ssafy.tripgg.global.common.BaseEntity;
-import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.math.BigDecimal;

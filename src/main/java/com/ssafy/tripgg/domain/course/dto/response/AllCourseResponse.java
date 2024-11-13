@@ -1,4 +1,4 @@
-package com.ssafy.tripgg.domain.course.dto;
+package com.ssafy.tripgg.domain.course.dto.response;
 
 import com.ssafy.tripgg.domain.course.entity.Course;
 import lombok.Builder;

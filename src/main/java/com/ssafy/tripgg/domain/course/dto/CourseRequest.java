@@ -2,16 +2,15 @@ package com.ssafy.tripgg.domain.course.dto;
 
 import com.ssafy.tripgg.domain.course.entity.enums.OrderType;
 import com.ssafy.tripgg.domain.course.entity.enums.Region;
-import jakarta.validation.constraints.Positive;
-import lombok.*;
+import com.ssafy.tripgg.global.common.validator.ValidEnum;
+import lombok.Data;
 
-@Getter @ToString
-@Builder @Setter
-@NoArgsConstructor
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Data
 public class CourseRequest {
 
-    private OrderType order = OrderType.LATEST;
+    @ValidEnum(enumClass = OrderType.class)
+    private OrderType orderBy = OrderType.LATEST;
 
+    @ValidEnum(enumClass = Region.class)
     private Region region = Region.ALL;
 }

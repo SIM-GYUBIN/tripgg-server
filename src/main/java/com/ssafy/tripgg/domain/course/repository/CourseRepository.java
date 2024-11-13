@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Query("SELECT c FROM Course c " +
-            "WHERE (:regionCode IS NULL OR c.regionId = :regionCode) " +
+            "WHERE (:regionCode = 0 OR c.regionId = :regionCode) " +
             "ORDER BY c.createdAt DESC")
     Page<Course> findLatestCourses(
             @Param("regionCode") Integer regionCode,
@@ -21,7 +21,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     @Query("SELECT c FROM Course c " +
             "LEFT JOIN CourseProgress cp ON c.id = cp.course.id " +
-            "WHERE (:regionCode IS NULL OR c.regionId = :regionCode) " +
+            "WHERE (:regionCode = 0 OR c.regionId = :regionCode) " +
             "GROUP BY c.id " +
             "ORDER BY COUNT(cp.id) DESC")
     Page<Course> findPopularCourses(

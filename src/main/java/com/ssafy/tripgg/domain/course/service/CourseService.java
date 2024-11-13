@@ -23,9 +23,7 @@ public class CourseService {
 
     public List<AllCourseResponse> getAllCourse(CourseRequest courseRequest, Pageable pageable) {
 
-        Integer regionCode = courseRequest.getRegion() == Region.ALL
-                ? null
-                : courseRequest.getRegion().getCode();
+        Integer regionCode = courseRequest.getRegion().getCode();
 
         Page<Course> courses = switch (courseRequest.getOrderBy()) {
             case LATEST -> courseRepository.findLatestCourses(regionCode, pageable);

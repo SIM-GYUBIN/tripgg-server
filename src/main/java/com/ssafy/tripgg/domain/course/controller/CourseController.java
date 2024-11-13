@@ -26,6 +26,6 @@ public class CourseController {
             @PageableDefault(size = 10) Pageable pageable,
             @Valid CourseRequest courseRequest) {
 
-        return ApiResponse.success(courseService.getAllCourse(pageable, courseRequest));
+        return ApiResponse.success(courseService.getAllCourse(courseRequest, pageable));
     }
 }

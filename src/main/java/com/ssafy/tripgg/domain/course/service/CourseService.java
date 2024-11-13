@@ -21,7 +21,7 @@ import java.util.List;
 public class CourseService {
     private final CourseRepository courseRepository;
 
-    public List<AllCourseResponse> getAllCourse(Pageable pageable, CourseRequest courseRequest) {
+    public List<AllCourseResponse> getAllCourse(CourseRequest courseRequest, Pageable pageable) {
 
         Integer regionCode = courseRequest.getRegion() == Region.ALL
                 ? null

@@ -52,4 +52,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             @Param("regionCode") Integer regionCode,
             Pageable pageable
     );
+
+
 }

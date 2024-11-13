@@ -8,7 +8,7 @@ import com.ssafy.tripgg.domain.course.repository.CourseRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -21,25 +21,18 @@ import java.util.List;
 public class CourseService {
     private final CourseRepository courseRepository;
 
-    public List<AllCourseResponse> getAllCourse(CourseRequest courseRequest) {
+    public List<AllCourseResponse> getAllCourse(Pageable pageable, CourseRequest courseRequest) {
 
         Integer regionCode = courseRequest.getRegion() == Region.ALL
                 ? null
                 : courseRequest.getRegion().getCode();
 
-        // 기본 페이징
-        Pageable pageable = PageRequest.of(
-                courseRequest.getPage(),
-                courseRequest.getSize()
-        );
+        Page<Course> courses = switch (courseRequest.getOrderBy()) {
+            case LATEST -> courseRepository.findLatestCourses(regionCode, pageable);
+            case POPULAR -> courseRepository.findPopularCourses(regionCode, pageable);
+        };
 
-
-        log.info("regionCode: {}, orderType: {}", regionCode, courseRequest.getOrder().name());
-
-        List<Course> allCourse = courseRepository.findAllCourseByCondition(regionCode, courseRequest.getOrder().name(), pageable)
-                .getContent();
-
-        return allCourse.stream()
+        return courses.stream()
                 .map(AllCourseResponse::from)
                 .toList();
     }

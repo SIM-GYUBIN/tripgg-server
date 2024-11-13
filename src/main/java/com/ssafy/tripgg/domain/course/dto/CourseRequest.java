@@ -14,9 +14,4 @@ public class CourseRequest {
     private OrderType order = OrderType.LATEST;
 
     private Region region = Region.ALL;
-
-    @Positive
-    private Integer page = 1;
-
-    private Integer size = 10;
 }

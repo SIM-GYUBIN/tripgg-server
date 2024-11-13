@@ -6,6 +6,8 @@ import com.ssafy.tripgg.domain.course.service.CourseService;
 import com.ssafy.tripgg.global.common.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,9 +22,10 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping("/all")
-    public ApiResponse<List<AllCourseResponse>> getAllCourses(CourseRequest courseRequest) {
+    public ApiResponse<List<AllCourseResponse>> getAllCourses(
+            @PageableDefault(size = 10) Pageable pageable,
+            @Valid CourseRequest courseRequest) {
 
-        System.out.println(courseRequest);
-        return ApiResponse.success(courseService.getAllCourse(courseRequest));
+        return ApiResponse.success(courseService.getAllCourse(pageable, courseRequest));
     }
 }

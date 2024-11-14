@@ -11,4 +11,8 @@ public class AuthenticationUtil {
         }
         return userPrincipal.getId();
     }
+
+    public static Long getCurrentUserIdCanNull(UserPrincipal userPrincipal) {
+        return userPrincipal == null ? null : userPrincipal.getId();
+    }
 }

@@ -1,4 +1,4 @@
-package com.ssafy.tripgg.domain.course.dto.response;
+package com.ssafy.tripgg.domain.course.dto.response.course_list;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;

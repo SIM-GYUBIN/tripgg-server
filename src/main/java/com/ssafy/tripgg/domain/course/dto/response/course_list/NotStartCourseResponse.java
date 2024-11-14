@@ -1,4 +1,4 @@
-package com.ssafy.tripgg.domain.course.dto.response;
+package com.ssafy.tripgg.domain.course.dto.response.course_list;
 
 import com.ssafy.tripgg.domain.course.entity.Course;
 import com.ssafy.tripgg.domain.course.entity.enums.Region;
@@ -9,10 +9,10 @@ import java.util.Objects;
 
 @Getter
 @SuperBuilder
-public class AllCourseResponse extends BaseCourseResponse {
+public class NotStartCourseResponse extends BaseCourseResponse {
 
-    public static AllCourseResponse from(Course course) {
-        return AllCourseResponse.builder()
+    public static NotStartCourseResponse from(Course course) {
+        return NotStartCourseResponse.builder()
                 .id(course.getId())
                 .title(course.getTitle())
                 .description(course.getDescription())

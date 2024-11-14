@@ -1,4 +1,4 @@
-package com.ssafy.tripgg.domain.course.dto.response;
+package com.ssafy.tripgg.domain.course.dto.response.course_list;
 
 import com.ssafy.tripgg.domain.course.dto.query.InProgressCourseQuery;
 import com.ssafy.tripgg.domain.course.entity.enums.Region;

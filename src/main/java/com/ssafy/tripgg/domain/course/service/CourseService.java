@@ -23,7 +23,7 @@ import java.util.List;
 public class CourseService {
     private final CourseRepository courseRepository;
 
-    public List<AllCourseResponse> getAllCourse(CourseRequest courseRequest, Pageable pageable) {
+    public CustomPage<AllCourseResponse> getAllCourse(CourseRequest courseRequest, Pageable pageable) {
 
         Integer regionCode = courseRequest.getRegion().getCode();
 
@@ -32,12 +32,11 @@ public class CourseService {
             case POPULAR -> courseRepository.findPopularCourses(regionCode, pageable);
         };
 
-        return courses.stream()
-                .map(AllCourseResponse::from)
-                .toList();
+        Page<AllCourseResponse> allCourseResponses = courses.map(AllCourseResponse::from);
+        return new CustomPage<>(allCourseResponses);
     }
 
-    public List<NotStartCourseResponse> getNotStartedCourse(Long userId, CourseRequest courseRequest, Pageable pageable) {
+    public CustomPage<NotStartCourseResponse> getNotStartedCourse(Long userId, CourseRequest courseRequest, Pageable pageable) {
 
         Integer regionCode = courseRequest.getRegion().getCode();
 
@@ -46,15 +45,14 @@ public class CourseService {
             case POPULAR -> courseRepository.findNotStartedPopularCourses(userId, regionCode, pageable);
         };
 
-        return courses.stream()
-                .map(NotStartCourseResponse::from)
-                .toList();
+        Page<NotStartCourseResponse> notStartCourseResponses = courses.map(NotStartCourseResponse::from);
+        return new CustomPage<>(notStartCourseResponses);
     }
 
-    public List<InProgressCourseResponse> getInProgressCourse(Long userId, @Valid CourseRequest courseRequest, Pageable pageable) {
+    public CustomPage<InProgressCourseResponse> getInProgressCourse(Long userId, @Valid CourseRequest courseRequest, Pageable pageable) {
         Integer regionCode = courseRequest.getRegion().getCode();
 
-        Page<Course> courses = switch (courseRequest.getOrderBy()) {
+        Page<InProgressCourseQuery> inProgressCourseQuery = switch (courseRequest.getOrderBy()) {
             case LATEST -> courseRepository.findInProgressLatestCourses(userId, regionCode, pageable);
             case POPULAR -> courseRepository.findInProgressPopularCourses(userId, regionCode, pageable);
         };

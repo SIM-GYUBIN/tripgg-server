@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/courses")
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping("/all")
-    public ApiResponse<List<AllCourseResponse>> getAllCourses(
+    public ApiResponse<CustomPage<AllCourseResponse>> getAllCourses(
             @PageableDefault(size = 10) Pageable pageable,
             @Valid CourseRequest courseRequest) {
 
@@ -34,7 +32,7 @@ public class CourseController {
     }
 
     @GetMapping("/not-started")
-    public ApiResponse<List<NotStartCourseResponse>> getNotStartedCourses(
+    public ApiResponse<CustomPage<NotStartCourseResponse>> getNotStartedCourses(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PageableDefault(size = 10) Pageable pageable,
             @Valid CourseRequest courseRequest) {
@@ -45,7 +43,7 @@ public class CourseController {
     }
 
     @GetMapping("/in-progress")
-    public ApiResponse<List<InProgressCourseResponse>> getInProgressCourses(
+    public ApiResponse<CustomPage<InProgressCourseResponse>> getInProgressCourses(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PageableDefault(size = 10) Pageable pageable,
             @Valid CourseRequest courseRequest) {

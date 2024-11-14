@@ -2,10 +2,12 @@ package com.ssafy.tripgg.domain.course.controller;
 
 import com.ssafy.tripgg.domain.course.dto.CourseRequest;
 import com.ssafy.tripgg.domain.course.dto.response.AllCourseResponse;
+import com.ssafy.tripgg.domain.course.dto.response.CompletedCourseResponse;
 import com.ssafy.tripgg.domain.course.dto.response.InProgressCourseResponse;
 import com.ssafy.tripgg.domain.course.dto.response.NotStartCourseResponse;
 import com.ssafy.tripgg.domain.course.service.CourseService;
 import com.ssafy.tripgg.global.common.ApiResponse;
+import com.ssafy.tripgg.global.common.CustomPage;
 import com.ssafy.tripgg.global.config.security.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -51,5 +53,16 @@ public class CourseController {
         Long userId = userPrincipal.getId();
 
         return ApiResponse.success(courseService.getInProgressCourse(userId, courseRequest, pageable));
+    }
+
+    @GetMapping("/completed")
+    public ApiResponse<CustomPage<CompletedCourseResponse>> getCompletedCourses(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PageableDefault(size = 10) Pageable pageable,
+            @Valid CourseRequest courseRequest) {
+
+        Long userId = userPrincipal.getId();
+
+        return ApiResponse.success(courseService.getCompletedCourse(userId, courseRequest, pageable));
     }
 }

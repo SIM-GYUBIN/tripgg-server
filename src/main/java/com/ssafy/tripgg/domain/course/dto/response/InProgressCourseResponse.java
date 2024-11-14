@@ -1,20 +1,32 @@
 package com.ssafy.tripgg.domain.course.dto.response;
 
-import lombok.Builder;
-import lombok.Data;
+import com.ssafy.tripgg.domain.course.dto.query.InProgressCourseQuery;
+import com.ssafy.tripgg.domain.course.entity.enums.Region;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Data
-@Builder
-public class InProgressCourseResponse {
-    private Long id;
-    private String title;
-    private String description;
-    private String thumbnailUrl;
-    private LocalDateTime createdAt;
+@Getter
+@SuperBuilder
+public class InProgressCourseResponse extends BaseCourseResponse{
 
-    private Integer earnedPoints;
-    private Integer remainingPlaces;
+    private Long totalPlaceNum;
+    private Long verifiedPlaceNum;
     private LocalDateTime startedAt;
+
+    public static InProgressCourseResponse from(InProgressCourseQuery queryDto) {
+        return InProgressCourseResponse.builder()
+                .id(queryDto.getId())
+                .title(queryDto.getTitle())
+                .description(queryDto.getDescription())
+                .region(Objects.requireNonNull(Region.findByCode(queryDto.getRegionId())).getKoreanName())
+                .thumbnailUrl(queryDto.getThumbnailUrl())
+                .createdAt(queryDto.getCreatedAt())
+                .totalPlaceNum(queryDto.getTotalPlaceNum())
+                .verifiedPlaceNum(queryDto.getVerifiedPlaceNum())
+                .startedAt(queryDto.getStartedAt())
+                .build();
+    }
 }

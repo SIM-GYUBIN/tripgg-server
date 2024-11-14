@@ -20,19 +20,28 @@ public enum Region {
     JEONNAM("전남",38),
     JEJU("제주",39);
 
-    private final String region;
+    private final String koreanName;
     private final Integer code;
 
-    Region(String region, Integer code) {
-        this.region = region;
+    Region(String koreanName, Integer code) {
+        this.koreanName = koreanName;
         this.code = code;
     }
 
-    public String getRegion() {
-        return region;
+    public String getKoreanName() {
+        return koreanName;
     }
 
     public Integer getCode() {
         return code;
+    }
+
+    public static Region findByCode(Integer code) {
+        for (Region region : values()) {
+            if (region.getCode().equals(code)) {
+                return region;
+            }
+        }
+        return null;
     }
 }

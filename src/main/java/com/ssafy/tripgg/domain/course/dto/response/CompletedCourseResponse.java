@@ -9,10 +9,10 @@ import java.util.Objects;
 
 @Getter
 @SuperBuilder
-public class AllCourseResponse extends BaseCourseResponse {
+public class CompletedCourseResponse extends BaseCourseResponse {
 
-    public static AllCourseResponse from(Course course) {
-        return AllCourseResponse.builder()
+    public static CompletedCourseResponse from(Course course) {
+        return CompletedCourseResponse.builder()
                 .id(course.getId())
                 .title(course.getTitle())
                 .description(course.getDescription())

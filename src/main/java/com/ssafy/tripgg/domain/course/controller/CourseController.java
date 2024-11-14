@@ -8,6 +8,7 @@ import com.ssafy.tripgg.domain.course.dto.response.NotStartCourseResponse;
 import com.ssafy.tripgg.domain.course.service.CourseService;
 import com.ssafy.tripgg.global.common.ApiResponse;
 import com.ssafy.tripgg.global.common.CustomPage;
+import com.ssafy.tripgg.global.common.util.AuthenticationUtil;
 import com.ssafy.tripgg.global.config.security.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class CourseController {
             @PageableDefault Pageable pageable,
             @Valid CourseRequest courseRequest) {
 
-        Long userId = userPrincipal.getId();
+        Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(courseService.getNotStartedCourse(userId, courseRequest, pageable));
     }
@@ -50,7 +51,7 @@ public class CourseController {
             @PageableDefault Pageable pageable,
             @Valid CourseRequest courseRequest) {
 
-        Long userId = userPrincipal.getId();
+        Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(courseService.getInProgressCourse(userId, courseRequest, pageable));
     }
@@ -61,8 +62,13 @@ public class CourseController {
             @PageableDefault Pageable pageable,
             @Valid CourseRequest courseRequest) {
 
-        Long userId = userPrincipal.getId();
+        Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(courseService.getCompletedCourse(userId, courseRequest, pageable));
     }
+
+//    @GetMapping("/{courseId}")
+//    public ApiResponse<?> getCourseDetail() {
+//        return ApiResponse.success();
+//    }
 }

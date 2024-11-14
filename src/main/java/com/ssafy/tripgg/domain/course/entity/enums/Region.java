@@ -1,5 +1,8 @@
 package com.ssafy.tripgg.domain.course.entity.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Region {
     ALL("전국", 0),
     SEOUL("서울",1),
@@ -26,14 +29,6 @@ public enum Region {
     Region(String koreanName, Integer code) {
         this.koreanName = koreanName;
         this.code = code;
-    }
-
-    public String getKoreanName() {
-        return koreanName;
-    }
-
-    public Integer getCode() {
-        return code;
     }
 
     public static Region findByCode(Integer code) {

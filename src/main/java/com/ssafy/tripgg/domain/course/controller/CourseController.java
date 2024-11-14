@@ -27,7 +27,7 @@ public class CourseController {
 
     @GetMapping("/all")
     public ApiResponse<CustomPage<AllCourseResponse>> getAllCourses(
-            @PageableDefault(size = 10) Pageable pageable,
+            @PageableDefault Pageable pageable,
             @Valid CourseRequest courseRequest) {
 
         return ApiResponse.success(courseService.getAllCourse(courseRequest, pageable));
@@ -36,7 +36,7 @@ public class CourseController {
     @GetMapping("/not-started")
     public ApiResponse<CustomPage<NotStartCourseResponse>> getNotStartedCourses(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PageableDefault(size = 10) Pageable pageable,
+            @PageableDefault Pageable pageable,
             @Valid CourseRequest courseRequest) {
 
         Long userId = userPrincipal.getId();
@@ -47,7 +47,7 @@ public class CourseController {
     @GetMapping("/in-progress")
     public ApiResponse<CustomPage<InProgressCourseResponse>> getInProgressCourses(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PageableDefault(size = 10) Pageable pageable,
+            @PageableDefault Pageable pageable,
             @Valid CourseRequest courseRequest) {
 
         Long userId = userPrincipal.getId();
@@ -58,7 +58,7 @@ public class CourseController {
     @GetMapping("/completed")
     public ApiResponse<CustomPage<CompletedCourseResponse>> getCompletedCourses(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PageableDefault(size = 10) Pageable pageable,
+            @PageableDefault Pageable pageable,
             @Valid CourseRequest courseRequest) {
 
         Long userId = userPrincipal.getId();

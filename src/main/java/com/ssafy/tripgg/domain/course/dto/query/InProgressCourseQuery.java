@@ -1,6 +1,5 @@
 package com.ssafy.tripgg.domain.course.dto.query;
 
-import com.ssafy.tripgg.domain.course.entity.enums.Region;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

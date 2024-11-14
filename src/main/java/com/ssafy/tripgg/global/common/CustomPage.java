@@ -7,13 +7,13 @@ import java.util.List;
 
 @Getter
 public class CustomPage<T> {
-    private List<T> content;
-    private int pageNumber;
-    private int totalPages;
-    private long totalElements;
-    private int pageSize;
-    private boolean first;
-    private boolean last;
+    private final List<T> content;
+    private final int pageNumber;
+    private final int totalPages;
+    private final long totalElements;
+    private final int pageSize;
+    private final boolean first;
+    private final boolean last;
 
     public CustomPage(Page<T> page) {
         this.content = page.getContent();

@@ -84,4 +84,14 @@ public class CourseController {
         courseService.challengeCourse(userId, courseId);
         return ApiResponse.success("챌린지에 참여하였습니다.");
     }
+
+    @PostMapping("/{courseId}/giveup")
+    public ApiResponse<String> abandonCourse(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable("courseId") Long courseId) {
+
+        Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        courseService.abandonCourse(userId, courseId);
+        return ApiResponse.success("챌린지를 포기하였습니다.");
+    }
 }

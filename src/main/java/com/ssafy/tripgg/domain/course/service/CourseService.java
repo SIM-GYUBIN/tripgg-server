@@ -10,6 +10,7 @@ import com.ssafy.tripgg.domain.course.dto.response.course_list.InProgressCourseR
 import com.ssafy.tripgg.domain.course.dto.response.course_list.NotStartCourseResponse;
 import com.ssafy.tripgg.domain.course.entity.Course;
 import com.ssafy.tripgg.domain.course.entity.CourseProgress;
+import com.ssafy.tripgg.domain.course.entity.enums.ProgressStatus;
 import com.ssafy.tripgg.domain.course.repository.CourseProgressRepository;
 import com.ssafy.tripgg.domain.course.repository.CourseRepository;
 import com.ssafy.tripgg.domain.user.entity.User;
@@ -112,12 +113,42 @@ public class CourseService {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.COURSE_NOT_FOUND));
 
-        CourseProgress courseProgress = CourseProgress.builder()
-                .user(user)
-                .course(course)
-                .build();
+        Optional<CourseProgress> existingProgress = courseProgressRepository.findByUserAndCourse(user, course);
 
-        courseProgressRepository.save(courseProgress);
+        if (existingProgress.isEmpty()) {
+            CourseProgress courseProgress = CourseProgress.builder()
+                    .user(user)
+                    .course(course)
+                    .build();
+
+            courseProgressRepository.save(courseProgress);
+
+        } else {
+            CourseProgress courseProgress = existingProgress.get();
+
+            switch (courseProgress.getStatus()) {
+                case IN_PROGRESS -> throw new BusinessException(ErrorCode.COURSE_ALREADY_IN_PROGRESS);
+                case COMPLETED -> throw new BusinessException(ErrorCode.COURSE_ALREADY_COMPLETED);
+                case ABANDONED -> courseProgress.reChallenge();
+            }
+        }
+    }
+
+    public void abandonCourse(Long userId, Long courseId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.COURSE_NOT_FOUND));
+
+        CourseProgress courseProgress = courseProgressRepository.findByUserAndCourse(user, course)
+                .orElseThrow(() -> new BusinessException(ErrorCode.COURSE_PROCESS_NOT_FOUND));
+
+        if (courseProgress.getStatus() != ProgressStatus.IN_PROGRESS) {
+            throw new BusinessException(ErrorCode.COURSE_NOT_IN_PROGRESS);
+        }
+
+        courseProgress.abandon();
     }
 }
 

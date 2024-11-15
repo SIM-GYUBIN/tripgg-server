@@ -45,4 +45,9 @@ public class CourseProgress extends BaseEntity {
         this.status = ProgressStatus.ABANDONED;
         this.completedAt = LocalDateTime.now();
     }
+
+    public void reChallenge() {
+        this.status = ProgressStatus.IN_PROGRESS;
+        this.completedAt = null;
+    }
 }

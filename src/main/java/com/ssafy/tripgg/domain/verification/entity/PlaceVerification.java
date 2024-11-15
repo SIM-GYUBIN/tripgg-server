@@ -1,13 +1,10 @@
 package com.ssafy.tripgg.domain.verification.entity;
 
 import com.ssafy.tripgg.domain.course.entity.CourseProgress;
-import com.ssafy.tripgg.domain.course.entity.Place;
+import com.ssafy.tripgg.domain.place.entity.Place;
 import com.ssafy.tripgg.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,7 +12,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "place_verifications")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlaceVerification extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,19 +37,12 @@ public class PlaceVerification extends BaseEntity {
     @Column(name = "photo_url")
     private String photoUrl;
 
+    @Builder.Default
     @Column(name = "verified_at", nullable = false)
-    private LocalDateTime verifiedAt;
+    private LocalDateTime verifiedAt = LocalDateTime.now();
 
-    @Builder
-    public PlaceVerification(CourseProgress courseProgress, Place place,
-                             BigDecimal verifiedLatitude, BigDecimal verifiedLongitude,
-                             Boolean photoVerified, String photoUrl) {
-        this.courseProgress = courseProgress;
-        this.place = place;
-        this.verifiedLatitude = verifiedLatitude;
-        this.verifiedLongitude = verifiedLongitude;
-        this.photoVerified = photoVerified;
+    public void photoVerify(String photoUrl) {
+        this.photoVerified = true;
         this.photoUrl = photoUrl;
-        this.verifiedAt = LocalDateTime.now();
     }
 }

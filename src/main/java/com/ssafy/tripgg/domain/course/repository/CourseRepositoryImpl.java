@@ -7,7 +7,7 @@ import com.ssafy.tripgg.domain.course.dto.response.course_detail.PlaceResponse;
 import com.ssafy.tripgg.domain.course.entity.QCourse;
 import com.ssafy.tripgg.domain.course.entity.QCoursePlace;
 import com.ssafy.tripgg.domain.course.entity.QCourseProgress;
-import com.ssafy.tripgg.domain.course.entity.QPlace;
+import com.ssafy.tripgg.domain.place.entity.QPlace;
 import com.ssafy.tripgg.domain.course.entity.enums.Region;
 import com.ssafy.tripgg.domain.verification.entity.QPlaceVerification;
 import com.ssafy.tripgg.global.error.ErrorCode;

@@ -1,5 +1,6 @@
 package com.ssafy.tripgg.domain.course.entity;
 
+import com.ssafy.tripgg.domain.place.entity.Place;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -16,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -76,5 +73,25 @@ public class CourseController {
 
         Long userId = AuthenticationUtil.getCurrentUserIdCanNull(userPrincipal);
         return ApiResponse.success(courseService.getCourseDetail(userId, courseId));
+    }
+
+    @PostMapping("/{courseId}/challenge")
+    public ApiResponse<String> challengeCourse(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable("courseId") Long courseId) {
+
+        Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        courseService.challengeCourse(userId, courseId);
+        return ApiResponse.success("챌린지에 참여하였습니다.");
+    }
+
+    @PostMapping("/{courseId}/giveup")
+    public ApiResponse<String> abandonCourse(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable("courseId") Long courseId) {
+
+        Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        courseService.abandonCourse(userId, courseId);
+        return ApiResponse.success("챌린지를 포기하였습니다.");
     }
 }

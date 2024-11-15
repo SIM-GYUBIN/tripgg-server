@@ -18,7 +18,7 @@ public class User extends BaseEntity {
 
     @Column(nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    private Provider provider;    // enum으로 변경
+    private Provider provider;
 
     @Column(name = "provider_id", nullable = false)
     private String providerId;

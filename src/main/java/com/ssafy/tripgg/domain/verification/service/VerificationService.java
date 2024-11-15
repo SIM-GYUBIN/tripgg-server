@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Transactional
 @RequiredArgsConstructor
 public class VerificationService {
-    private static final double MAX_DISTANCE = 50.0;
+    private static final double MAX_DISTANCE = 100.0; //100m
     private static final int EARTH_RADIUS = 6371000;
 
     private final PlaceVerificationRepository placeVerificationRepository;

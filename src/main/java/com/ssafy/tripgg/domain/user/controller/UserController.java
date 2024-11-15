@@ -3,6 +3,7 @@ package com.ssafy.tripgg.domain.user.controller;
 import com.ssafy.tripgg.domain.user.dto.UserResponse;
 import com.ssafy.tripgg.domain.user.service.UserService;
 import com.ssafy.tripgg.global.common.ApiResponse;
+import com.ssafy.tripgg.global.common.util.AuthenticationUtil;
 import com.ssafy.tripgg.global.config.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,14 +17,14 @@ public class UserController {
 
     @GetMapping("/me")
     public ApiResponse<UserResponse> getUserInfo(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        Long userId = userPrincipal.getId();
+        Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
 
         return ApiResponse.success(userService.findById(userId));
     }
 
     @DeleteMapping("/me")
     public ApiResponse<String> deleteUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        Long userId = userPrincipal.getId();
+        Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
         userService.deleteById(userId);
 
         return ApiResponse.success("회원 탈퇴가 완료되었습니다.");

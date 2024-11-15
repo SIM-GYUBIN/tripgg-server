@@ -1,11 +1,13 @@
 package com.ssafy.tripgg.domain.course.service;
 
 import com.ssafy.tripgg.domain.course.dto.CourseRequest;
+import com.ssafy.tripgg.domain.course.dto.query.CourseDetailQuery;
 import com.ssafy.tripgg.domain.course.dto.query.InProgressCourseQuery;
-import com.ssafy.tripgg.domain.course.dto.response.AllCourseResponse;
-import com.ssafy.tripgg.domain.course.dto.response.CompletedCourseResponse;
-import com.ssafy.tripgg.domain.course.dto.response.InProgressCourseResponse;
-import com.ssafy.tripgg.domain.course.dto.response.NotStartCourseResponse;
+import com.ssafy.tripgg.domain.course.dto.response.course_detail.CourseDetailResponse;
+import com.ssafy.tripgg.domain.course.dto.response.course_list.AllCourseResponse;
+import com.ssafy.tripgg.domain.course.dto.response.course_list.CompletedCourseResponse;
+import com.ssafy.tripgg.domain.course.dto.response.course_list.InProgressCourseResponse;
+import com.ssafy.tripgg.domain.course.dto.response.course_list.NotStartCourseResponse;
 import com.ssafy.tripgg.domain.course.entity.Course;
 import com.ssafy.tripgg.domain.course.repository.CourseRepository;
 import com.ssafy.tripgg.global.common.CustomPage;
@@ -16,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -73,6 +77,22 @@ public class CourseService {
 
         Page<CompletedCourseResponse> completedCourseResponses = courses.map(CompletedCourseResponse::from);
         return new CustomPage<>(completedCourseResponses);
+    }
+
+    public CourseDetailResponse getCourseDetail(Long userId, Long courseId) {
+        CourseDetailQuery courseDetail = courseRepository.findCourseDetailById(courseId,
+                Optional.ofNullable(userId).orElse(-1L));
+
+        return CourseDetailResponse.builder()
+                .id(courseDetail.getId())
+                .title(courseDetail.getTitle())
+                .description(courseDetail.getDescription())
+                .region(courseDetail.getRegion())
+                .status(courseDetail.getStatus())
+                .places(courseDetail.getPlaces())
+                .createdAt(courseDetail.getCreatedAt())
+                .updatedAt(courseDetail.getUpdatedAt())
+                .build();
     }
 }
 

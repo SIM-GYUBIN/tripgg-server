@@ -135,13 +135,8 @@ public class CourseService {
     }
 
     public void abandonCourse(Long userId, Long courseId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.COURSE_NOT_FOUND));
-
-        CourseProgress courseProgress = courseProgressRepository.findByUserAndCourse(user, course)
+        CourseProgress courseProgress = courseProgressRepository.findByUser_IdAndCourse_Id(userId, courseId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.COURSE_PROCESS_NOT_FOUND));
 
         if (courseProgress.getStatus() != ProgressStatus.IN_PROGRESS) {

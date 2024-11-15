@@ -25,9 +25,13 @@ public enum ErrorCode {
     COURSE_ALREADY_ABANDONED(404, "CO005", "이미 포기한 코스입니다"),
     COURSE_NOT_IN_PROGRESS(404, "CO006", "코스 도전 상태가 아닙니다"),
 
+    // Place
+    PLACE_NOT_FOUND(404, "P001", "장소를 찾을 수 없습니다"),
+
     // Verification
     INVALID_LOCATION(400, "V001", "유효하지 않은 위치입니다"),
-    VERIFICATION_FAILED(400, "V002", "인증에 실패했습니다");
+    VERIFICATION_FAILED(400, "V002", "인증에 실패했습니다"),
+    ALREADY_VERIFIED(400, "V003", "이미 인증한 장소입니다");
 
     private final int status;
     private final String code;

@@ -1,4 +1,4 @@
-package com.ssafy.tripgg.domain.course.entity;
+package com.ssafy.tripgg.domain.place.entity;
 
 import com.ssafy.tripgg.global.common.BaseEntity;
 import jakarta.persistence.Column;

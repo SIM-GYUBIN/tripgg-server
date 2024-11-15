@@ -9,8 +9,14 @@ import com.ssafy.tripgg.domain.course.dto.response.course_list.CompletedCourseRe
 import com.ssafy.tripgg.domain.course.dto.response.course_list.InProgressCourseResponse;
 import com.ssafy.tripgg.domain.course.dto.response.course_list.NotStartCourseResponse;
 import com.ssafy.tripgg.domain.course.entity.Course;
+import com.ssafy.tripgg.domain.course.entity.CourseProgress;
+import com.ssafy.tripgg.domain.course.repository.CourseProgressRepository;
 import com.ssafy.tripgg.domain.course.repository.CourseRepository;
+import com.ssafy.tripgg.domain.user.entity.User;
+import com.ssafy.tripgg.domain.user.repository.UserRepository;
 import com.ssafy.tripgg.global.common.CustomPage;
+import com.ssafy.tripgg.global.error.ErrorCode;
+import com.ssafy.tripgg.global.error.exception.BusinessException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +32,10 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class CourseService {
+
     private final CourseRepository courseRepository;
+    private final CourseProgressRepository courseProgressRepository;
+    private final UserRepository userRepository;
 
     public CustomPage<AllCourseResponse> getAllCourse(CourseRequest courseRequest, Pageable pageable) {
 
@@ -93,6 +102,22 @@ public class CourseService {
                 .createdAt(courseDetail.getCreatedAt())
                 .updatedAt(courseDetail.getUpdatedAt())
                 .build();
+    }
+
+    public void challengeCourse(Long userId, Long courseId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.COURSE_NOT_FOUND));
+
+        CourseProgress courseProgress = CourseProgress.builder()
+                .user(user)
+                .course(course)
+                .build();
+
+        courseProgressRepository.save(courseProgress);
     }
 }
 

@@ -31,8 +31,9 @@ public class PlaceVerification extends BaseEntity {
     @Column(name = "verified_longitude", nullable = false, precision = 11, scale = 8)
     private BigDecimal verifiedLongitude;
 
+    @Builder.Default
     @Column(name = "photo_verified")
-    private Boolean photoVerified;
+    private Boolean photoVerified = false;
 
     @Column(name = "photo_url")
     private String photoUrl;

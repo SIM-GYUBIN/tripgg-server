@@ -1,9 +1,11 @@
 package com.ssafy.tripgg.domain.auth.controller;
 
 import com.ssafy.tripgg.domain.auth.dto.OAuthLoginRequest;
-import com.ssafy.tripgg.domain.auth.dto.OAuthLoginResponse;
+import com.ssafy.tripgg.domain.auth.dto.OAuthLoginResult;
+import com.ssafy.tripgg.domain.auth.dto.UserInfoResponse;
 import com.ssafy.tripgg.domain.auth.service.OAuthService;
 import com.ssafy.tripgg.global.common.ApiResponse;
+import com.ssafy.tripgg.global.common.util.CookieUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -13,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Duration;
-
 @RestController
 @RequestMapping("/api/oauth")
 @RequiredArgsConstructor
@@ -22,21 +22,15 @@ public class OAuthController {
     private final OAuthService oAuthService;
 
     @PostMapping("/kakao")
-    public ResponseEntity<ApiResponse<OAuthLoginResponse.UserInfo>> kakaoLogin(@RequestBody OAuthLoginRequest request) {
+    public ResponseEntity<ApiResponse<UserInfoResponse>> kakaoLogin(@RequestBody OAuthLoginRequest request) {
 
-        OAuthLoginResponse loginResponse = oAuthService.handleKakaoLogin(request.getCode());
+        OAuthLoginResult loginResult = oAuthService.handleKakaoLogin(request.getCode());
 
         // accessToken을 쿠키에 설정
-        ResponseCookie cookie = ResponseCookie.from("accessToken", loginResponse.getAccessToken())
-                .httpOnly(true)
-                .secure(true)
-                .sameSite("Strict")
-                .path("/")
-                .maxAge(Duration.ofDays(7))
-                .build();
+        ResponseCookie cookie = CookieUtil.createAccessTokenCookie(loginResult.getAccessToken());
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body(ApiResponse.success(loginResponse.getUser()));
+                .body(ApiResponse.success(loginResult.getUser()));
     }
 }

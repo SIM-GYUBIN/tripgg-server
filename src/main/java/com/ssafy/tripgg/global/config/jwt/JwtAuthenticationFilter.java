@@ -2,8 +2,10 @@ package com.ssafy.tripgg.global.config.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,9 +21,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
 
         try {
 //           1. 헤더에서 JWT 토큰 추출
@@ -45,10 +47,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 //    Bearer 제거하고 순수 토큰 추출
     private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
+//        String bearerToken = request.getHeader("Authorization");
+//
+//        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+//            return bearerToken.substring(7);
+//        }
 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("accessToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
         }
 
         return null;

@@ -14,6 +14,7 @@ public enum ErrorCode {
     // User
     USER_NOT_FOUND(404, "U001", "사용자를 찾을 수 없습니다"),
     INVALID_AUTH_TOKEN(401, "U002", "유효하지 않은 인증 토큰입니다"),
+    OAUTH_SERVER_ERROR(500, "U003", "OAuth 서버 오류가 발생했습니다"),
 
     // Course
     COURSE_NOT_FOUND(404, "CO001", "코스를 찾을 수 없습니다"),

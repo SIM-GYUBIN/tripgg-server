@@ -28,6 +28,7 @@ import java.util.List;
 public class VerificationService {
     private static final double MAX_DISTANCE = 100.0; //100m
     private static final int EARTH_RADIUS = 6371000;
+    public static final double SIMILARITY_THRESHOLD = 0.8;
 
     private final PlaceVerificationRepository placeVerificationRepository;
     private final PlaceRepository placeRepository;
@@ -92,15 +93,12 @@ public class VerificationService {
     }
 
     public void verifyImage(Long userId, Long courseId, Long placeId, MultipartFile userImage) {
-        // 1. 장소 존재 확인
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PLACE_NOT_FOUND));
 
-        // 2. 진행 상태 확인
         CourseProgress courseProgress = courseProgressRepository.findByUser_IdAndCourse_Id(userId, courseId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.COURSE_PROCESS_NOT_FOUND));
 
-        // 3. 사진 인증 가능 상태 확인
         PlaceVerification verification = placeVerificationRepository.findByCourseProgress_IdAndPlace_Id(courseProgress.getId(), placeId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PLACE_VERIFICATION_NOT_FOUND));
 
@@ -108,31 +106,24 @@ public class VerificationService {
             throw new BusinessException(ErrorCode.ALREADY_PHOTO_VERIFIED);
         }
 
-        // 5. 이미지를 S3에 업로드
-//        String imageUrl = s3ObjectStorage.uploadFile(userImage);
-
-        // 6. 이미지 인증
         try {
 
             MultipartFile baseImage = imageUtils.urlToMultipartFile(place.getImageUrl());
 
-            log.info("baseImageIsEmpty: {}", baseImage.isEmpty());
-            log.info("baseImage: {}", baseImage.getOriginalFilename());
-
             ApickApiResponse response = imageSimilarityApiClient.compareImages(baseImage, List.of(userImage));
 
-            log.info("response: {}", response);
+            log.info("similarity: {}", response.getData().getOutput().get("compare_image1"));
 
-            // 유사도 검증 (예: 0.7 이상일 경우 인증 성공)
-            if (response.getData().getSuccess() == 1 && response.getData().getOutput().get("compare_image1") >= 0.7) {
-//                verification.photoVerify(imageUrl);
+            if (response.getData().getSuccess() == 1 && response.getData().getOutput().get("compare_image1") >= SIMILARITY_THRESHOLD) {
+                String imageUrl = s3ObjectStorage.uploadFile(userImage);
+                verification.photoVerify(imageUrl);
             } else {
                 throw new BusinessException(ErrorCode.PHOTO_VERIFY_FAILED);
             }
 
+        } catch (BusinessException e) {
+            throw e;
         } catch (Exception e) {
-            // 실패시 업로드된 이미지 삭제
-//            s3ObjectStorage.deleteFile(imageUrl);
             throw new BusinessException(ErrorCode.VERIFICATION_FAILED);
         }
     }

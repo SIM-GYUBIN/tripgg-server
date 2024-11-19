@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -25,7 +26,7 @@ public class OAuthService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public OAuthLoginResult handleKakaoLogin(String code) {
+    public OAuthLoginResult handleKakaoLogin(String code) throws IOException {
 
         KakaoTokenResponse tokenResponse = kakaoOAuthClient.getToken(code);
         KakaoUserResponse userResponse = kakaoOAuthClient.getUserInfo(tokenResponse.getAccess_token());

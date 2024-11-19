@@ -1,4 +1,4 @@
-package com.ssafy.tripgg.infra.oauth.client;
+package com.ssafy.tripgg.infra.oauth.constants;
 
 public class KakaoOAuthConstants {
     public static class Urls {

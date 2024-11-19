@@ -1,6 +1,7 @@
 package com.ssafy.tripgg.infra.oauth.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.tripgg.infra.oauth.constants.KakaoOAuthConstants;
 import com.ssafy.tripgg.infra.oauth.dto.KakaoTokenResponse;
 import com.ssafy.tripgg.infra.oauth.dto.KakaoUserResponse;
 import lombok.RequiredArgsConstructor;

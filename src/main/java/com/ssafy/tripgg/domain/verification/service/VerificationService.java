@@ -12,6 +12,7 @@ import com.ssafy.tripgg.global.common.util.ImageUtils;
 import com.ssafy.tripgg.global.error.ErrorCode;
 import com.ssafy.tripgg.global.error.exception.BusinessException;
 import com.ssafy.tripgg.infra.apick.ImageSimilarityApiClient;
+import com.ssafy.tripgg.domain.verification.constants.VerificationConstants;
 import com.ssafy.tripgg.infra.aws.S3ObjectStorage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,6 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class VerificationService {
-    private static final double MAX_DISTANCE = 100.0; //100m
-    private static final int EARTH_RADIUS = 6371000;
-    public static final double SIMILARITY_THRESHOLD = 0.8;
 
     private final PlaceVerificationRepository placeVerificationRepository;
     private final PlaceRepository placeRepository;
@@ -74,7 +72,7 @@ public class VerificationService {
                 userLocation.getLatitude().doubleValue(),
                 userLocation.getLongitude().doubleValue());
 
-        if (distance > MAX_DISTANCE) {  // 50미터
+        if (distance > VerificationConstants.MAX_DISTANCE) {  // 50미터
             throw new BusinessException(ErrorCode.INVALID_LOCATION);
         }
     }
@@ -89,7 +87,7 @@ public class VerificationService {
                         Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return EARTH_RADIUS * c;  // 미터 단위로 반환
+        return VerificationConstants.EARTH_RADIUS * c;  // 미터 단위로 반환
     }
 
     public void verifyImage(Long userId, Long courseId, Long placeId, MultipartFile userImage) {
@@ -114,7 +112,7 @@ public class VerificationService {
 
             log.info("similarity: {}", response.getData().getOutput().get("compare_image1"));
 
-            if (response.getData().getSuccess() == 1 && response.getData().getOutput().get("compare_image1") >= SIMILARITY_THRESHOLD) {
+            if (response.getData().getSuccess() == 1 && response.getData().getOutput().get("compare_image1") >= VerificationConstants.SIMILARITY_THRESHOLD) {
                 String imageUrl = s3ObjectStorage.uploadFile(userImage);
                 verification.photoVerify(imageUrl);
             } else {

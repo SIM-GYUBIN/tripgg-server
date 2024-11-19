@@ -34,10 +34,16 @@ public enum ErrorCode {
     ALREADY_GPS_VERIFIED(400, "V003", "이미 GPS 인증한 장소입니다"),
     ALREADY_PHOTO_VERIFIED(400, "V004", "이미 사진 인증한 장소입니다"),
     PLACE_VERIFICATION_NOT_FOUND(404,"V005" , "기존 인증 정보를 찾을 수 없습니다"),
+    PHOTO_VERIFY_FAILED(400,"V006" , "사진 인증에 실패하였습니다."),
 
     // AWS,
     AWS_SERVER_ERROR(500, "A001", "파일 서버에 문제가 발생했습니다."),
-    FILE_NOT_FOUND(404 , "A002", "파일을 찾을 수 없습니다.");
+    FILE_NOT_FOUND(404 , "A002", "파일을 찾을 수 없습니다."),
+
+    // Image
+    IMAGE_DOWNLOAD_FAILED(400, "I001", "이미지 다운로드에 실패했습니다"),
+    IMAGE_CONVERSION_FAILED(400, "I002", "이미지 변환에 실패했습니다"),
+    API_CALL_FAILED(500, "I003", "API 호출에 실패했습니다");
 
     private final int status;
     private final String code;

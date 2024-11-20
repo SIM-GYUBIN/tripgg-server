@@ -19,6 +19,7 @@ import com.ssafy.tripgg.domain.user.repository.UserRepository;
 import com.ssafy.tripgg.domain.verification.entity.PlaceVerification;
 import com.ssafy.tripgg.domain.verification.repository.PlaceVerificationRepository;
 import com.ssafy.tripgg.global.common.CustomPage;
+import com.ssafy.tripgg.global.common.constants.PointConstants;
 import com.ssafy.tripgg.global.error.ErrorCode;
 import com.ssafy.tripgg.global.error.exception.BusinessException;
 import jakarta.transaction.Transactional;
@@ -160,9 +161,9 @@ public class CourseService {
 
         int score = 0;
         for (PlaceVerification verification : verificationList) {
-            score += 10;
+            score += PointConstants.GPS_VERIFICATION_POINT;
             if (verification.getPhotoVerified()) {
-                score += 20;
+                score += PointConstants.IMAGE_VERIFICATION_POINT;
             }
         }
 

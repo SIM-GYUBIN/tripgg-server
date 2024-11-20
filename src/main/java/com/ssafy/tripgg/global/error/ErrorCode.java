@@ -44,7 +44,11 @@ public enum ErrorCode {
     // Image
     IMAGE_DOWNLOAD_FAILED(400, "I001", "이미지 다운로드에 실패했습니다"),
     IMAGE_CONVERSION_FAILED(400, "I002", "이미지 변환에 실패했습니다"),
-    API_CALL_FAILED(500, "I003", "API 호출에 실패했습니다");
+    API_CALL_FAILED(500, "I003", "API 호출에 실패했습니다"),
+
+    // API
+    WEATHER_API_ERROR(500, "API001", "날씨 API 호출에 실패했습니다"),
+    GPT_API_ERROR(500, "API002", "GPT API 호출에 실패했습니다");
 
     private final int status;
     private final String code;

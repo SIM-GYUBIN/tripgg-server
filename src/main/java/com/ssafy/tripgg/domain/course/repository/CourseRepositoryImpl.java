@@ -5,6 +5,8 @@ import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.tripgg.domain.course.dto.query.CourseDetailQuery;
+import com.ssafy.tripgg.domain.course.dto.query.LocAndPlacesQuery;
+import com.ssafy.tripgg.domain.course.dto.query.PlacesQuery;
 import com.ssafy.tripgg.domain.course.dto.response.course_detail.PlaceResponse;
 import com.ssafy.tripgg.domain.course.entity.QCourse;
 import com.ssafy.tripgg.domain.course.entity.QCoursePlace;
@@ -121,6 +123,41 @@ public class CourseRepositoryImpl implements CourseCustomRepository {
                 .places(places)
                 .createdAt(firstRow.get(4, LocalDateTime.class))  // course.createdAt
                 .updatedAt(firstRow.get(5, LocalDateTime.class))  // course.updatedAt
+                .build();
+    }
+
+
+
+    @Override
+    public LocAndPlacesQuery findLocAndPlacesByCourseId(Long courseId) {
+
+        QCourse course = QCourse.course;
+        QCoursePlace coursePlace = QCoursePlace.coursePlace;
+        QPlace place = QPlace.place;
+
+        List<Tuple> results = queryFactory
+                .select(
+                        place.latitude,
+                        place.longitude,
+                        place.name,
+                        place.description
+                )
+                .from(course)
+                .leftJoin(coursePlace).on(coursePlace.course.eq(course))
+                .leftJoin(place).on(coursePlace.place.eq(place))
+                .where(course.id.eq(courseId))
+                .orderBy(coursePlace.sequence.asc())
+                .fetch();
+
+        return LocAndPlacesQuery.builder()
+                .latitude(results.get(0).get(0, BigDecimal.class))
+                .longitude(results.get(0).get(1, BigDecimal.class))
+                .places(results.stream()
+                        .map(row -> PlacesQuery.builder()
+                                .name(row.get(2, String.class))
+                                .description(row.get(3, String.class))
+                                .build())
+                        .toList())
                 .build();
     }
 }

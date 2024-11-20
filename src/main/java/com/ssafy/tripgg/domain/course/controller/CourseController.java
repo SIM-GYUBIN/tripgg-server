@@ -2,6 +2,7 @@ package com.ssafy.tripgg.domain.course.controller;
 
 import com.ssafy.tripgg.domain.course.dto.CourseRequest;
 import com.ssafy.tripgg.domain.course.dto.response.course_detail.CourseDetailResponse;
+import com.ssafy.tripgg.domain.course.dto.response.course_detail.CourseFinishResponse;
 import com.ssafy.tripgg.domain.course.dto.response.course_list.AllCourseResponse;
 import com.ssafy.tripgg.domain.course.dto.response.course_list.CompletedCourseResponse;
 import com.ssafy.tripgg.domain.course.dto.response.course_list.InProgressCourseResponse;
@@ -93,5 +94,14 @@ public class CourseController {
         Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
         courseService.abandonCourse(userId, courseId);
         return ApiResponse.success("챌린지를 포기하였습니다.");
+    }
+
+    @PostMapping("/{courseId}/finish")
+    public ApiResponse<CourseFinishResponse> finishCourse(
+            @AuthenticationPrincipal UserPrincipal userPrincipal,
+            @PathVariable("courseId") Long courseId) {
+
+        Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
+        return ApiResponse.success(courseService.finishCourse(userId, courseId));
     }
 }

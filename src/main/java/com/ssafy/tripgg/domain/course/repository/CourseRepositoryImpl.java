@@ -1,20 +1,25 @@
 package com.ssafy.tripgg.domain.course.repository;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.tripgg.domain.course.dto.query.CourseDetailQuery;
 import com.ssafy.tripgg.domain.course.dto.response.course_detail.PlaceResponse;
 import com.ssafy.tripgg.domain.course.entity.QCourse;
 import com.ssafy.tripgg.domain.course.entity.QCoursePlace;
 import com.ssafy.tripgg.domain.course.entity.QCourseProgress;
-import com.ssafy.tripgg.domain.place.entity.QPlace;
+import com.ssafy.tripgg.domain.course.entity.enums.ProgressStatus;
 import com.ssafy.tripgg.domain.course.entity.enums.Region;
+import com.ssafy.tripgg.domain.place.entity.QPlace;
 import com.ssafy.tripgg.domain.verification.entity.QPlaceVerification;
 import com.ssafy.tripgg.global.error.ErrorCode;
 import com.ssafy.tripgg.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,6 +46,20 @@ public class CourseRepositoryImpl implements CourseCustomRepository {
                         course.createdAt,
                         course.updatedAt,
                         coursePlace.sequence,
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(coursePlace.count())
+                                        .from(coursePlace)
+                                        .where(coursePlace.course.id.eq(courseId)),
+                                "totalPlaceNum"
+                        ),
+                        ExpressionUtils.as(
+                                JPAExpressions
+                                        .select(placeVerification.count())
+                                        .from(placeVerification)
+                                        .where(placeVerification.courseProgress.course.id.eq(courseId)),
+                                "verifiedPlaceNum"
+                        ),
                         place.id,
                         place.name,
                         place.description,
@@ -75,31 +94,33 @@ public class CourseRepositoryImpl implements CourseCustomRepository {
 
         // 장소 정보 매핑
         List<PlaceResponse> places = results.stream()
-                .filter(row -> row.get(place.id) != null)
+                .filter(row -> row.get(9, Long.class) != null)  // place.id
                 .map(row -> PlaceResponse.builder()
-                        .id(row.get(place.id))
-                        .name(row.get(place.name))
-                        .description(row.get(place.description))
-                        .latitude(row.get(place.latitude))
-                        .longitude(row.get(place.longitude))
-                        .address(row.get(place.address))
-                        .imageUrl(row.get(place.imageUrl))
-                        .sequence(row.get(coursePlace.sequence))
-                        .isVerified(Boolean.TRUE.equals(row.get(15, Boolean.class)))
-                        .isPhotoVerified(Boolean.TRUE.equals(row.get(placeVerification.photoVerified)))
+                        .id(row.get(9, Long.class))            // place.id
+                        .name(row.get(10, String.class))       // place.name
+                        .description(row.get(11, String.class)) // place.description
+                        .latitude(row.get(12, BigDecimal.class))   // place.latitude
+                        .longitude(row.get(13, BigDecimal.class))  // place.longitude
+                        .address(row.get(14, String.class))    // place.address
+                        .imageUrl(row.get(15, String.class))   // place.imageUrl
+                        .sequence(row.get(6, Integer.class))   // coursePlace.sequence
+                        .isVerified(Boolean.TRUE.equals(row.get(17, Boolean.class)))  // isVerified
+                        .isPhotoVerified(Boolean.TRUE.equals(row.get(18, Boolean.class))) // photoVerified
                         .build())
                 .toList();
 
         // CourseDetailQuery 생성
         return CourseDetailQuery.builder()
-                .id(firstRow.get(course.id))
-                .title(firstRow.get(course.title))
-                .description(firstRow.get(course.description))
+                .id(firstRow.get(0, Long.class))           // course.id
+                .title(firstRow.get(1, String.class))      // course.title
+                .description(firstRow.get(2, String.class)) // course.description
                 .region(region.getKoreanName())
-                .status(firstRow.get(courseProgress.status))
+                .status(firstRow.get(16, ProgressStatus.class))  // courseProgress.status
+                .totalPlaceNum(firstRow.get(7, Long.class))     // coursePlace count subquery 결과
+                .verifiedPlaceNum(firstRow.get(8, Long.class))  // placeVerification count subquery 결과
                 .places(places)
-                .createdAt(firstRow.get(course.createdAt))
-                .updatedAt(firstRow.get(course.updatedAt))
+                .createdAt(firstRow.get(4, LocalDateTime.class))  // course.createdAt
+                .updatedAt(firstRow.get(5, LocalDateTime.class))  // course.updatedAt
                 .build();
     }
 }

@@ -52,7 +52,7 @@ public class CourseService {
             case POPULAR -> courseRepository.findPopularCourses(regionCode, pageable);
         };
 
-        Page<AllCourseResponse> allCourseResponses = courses.map(AllCourseResponse::from);
+        Page<AllCourseResponse> allCourseResponses = courses.map(AllCourseResponse::of);
         return new CustomPage<>(allCourseResponses);
     }
 
@@ -65,7 +65,7 @@ public class CourseService {
             case POPULAR -> courseRepository.findNotStartedPopularCourses(userId, regionCode, pageable);
         };
 
-        Page<NotStartCourseResponse> notStartCourseResponses = courses.map(NotStartCourseResponse::from);
+        Page<NotStartCourseResponse> notStartCourseResponses = courses.map(NotStartCourseResponse::of);
         return new CustomPage<>(notStartCourseResponses);
     }
 
@@ -77,7 +77,7 @@ public class CourseService {
             case POPULAR -> courseRepository.findInProgressPopularCourses(userId, regionCode, pageable);
         };
 
-        Page<InProgressCourseResponse> inProgressCourseResponses = inProgressCourseQuery.map(InProgressCourseResponse::from);
+        Page<InProgressCourseResponse> inProgressCourseResponses = inProgressCourseQuery.map(InProgressCourseResponse::of);
         return new CustomPage<>(inProgressCourseResponses);
     }
 
@@ -90,7 +90,7 @@ public class CourseService {
             case POPULAR -> courseRepository.findCompletedPopularCourses(userId, regionCode, pageable);
         };
 
-        Page<CompletedCourseResponse> completedCourseResponses = courses.map(CompletedCourseResponse::from);
+        Page<CompletedCourseResponse> completedCourseResponses = courses.map(CompletedCourseResponse::of);
         return new CustomPage<>(completedCourseResponses);
     }
 

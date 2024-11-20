@@ -19,7 +19,7 @@ public class UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        return UserResponse.from(user);
+        return UserResponse.of(user);
     }
 
     public void deleteById(Long userId) {

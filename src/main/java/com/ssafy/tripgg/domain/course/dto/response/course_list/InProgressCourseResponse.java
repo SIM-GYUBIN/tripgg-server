@@ -16,7 +16,7 @@ public class InProgressCourseResponse extends BaseCourseResponse{
     private Long verifiedPlaceNum;
     private LocalDateTime startedAt;
 
-    public static InProgressCourseResponse from(InProgressCourseQuery queryDto) {
+    public static InProgressCourseResponse of(InProgressCourseQuery queryDto) {
         return InProgressCourseResponse.builder()
                 .id(queryDto.getId())
                 .title(queryDto.getTitle())

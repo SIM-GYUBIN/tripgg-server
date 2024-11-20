@@ -13,7 +13,7 @@ public class UserResponse {
     private String profileImageUrl;
     private Integer totalPoints;
 
-    public static UserResponse from(User user) {
+    public static UserResponse of(User user) {
         return UserResponse.builder()
                 .id(user.getId())
                 .nickname(user.getNickname())

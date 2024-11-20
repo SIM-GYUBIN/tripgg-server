@@ -4,29 +4,41 @@ import com.ssafy.tripgg.global.error.ErrorCode;
 import com.ssafy.tripgg.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class ImageUtils {
 
-    private final RestTemplate restTemplate;
+    private final OkHttpClient okHttpClient;
 
     public MultipartFile urlToMultipartFile(String imageUrl) {
         try {
-            byte[] imageBytes = restTemplate.getForObject(imageUrl, byte[].class);
-            if (imageBytes == null) {
-                throw new BusinessException(ErrorCode.IMAGE_DOWNLOAD_FAILED);
+            Request request = new Request.Builder()
+                    .url(imageUrl)
+                    .get()
+                    .build();
+
+            try (Response response = okHttpClient.newCall(request).execute()) {
+                if (!response.isSuccessful()) {
+                    throw new BusinessException(ErrorCode.IMAGE_DOWNLOAD_FAILED);
+                }
+
+                assert response.body() != null;
+                byte[] imageBytes = response.body().bytes();
+                String fileName = extractFileName(imageUrl);
+                String contentType = determineContentType(fileName);
+
+                return new CustomMultipartFile(imageBytes, fileName, contentType);
             }
-
-            String fileName = extractFileName(imageUrl);
-            String contentType = determineContentType(fileName);
-
-            return new CustomMultipartFile(imageBytes, fileName, contentType);
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new BusinessException(ErrorCode.IMAGE_CONVERSION_FAILED);
         }
     }

@@ -17,6 +17,10 @@ public class CourseDetailQuery {
     private String description;
     private String region;
     private ProgressStatus status;
+
+    private Long totalPlaceNum;
+    private Long verifiedPlaceNum;
+
     private List<PlaceResponse> places;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

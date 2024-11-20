@@ -11,7 +11,7 @@ import java.util.Objects;
 @SuperBuilder
 public class AllCourseResponse extends BaseCourseResponse {
 
-    public static AllCourseResponse from(Course course) {
+    public static AllCourseResponse of(Course course) {
         return AllCourseResponse.builder()
                 .id(course.getId())
                 .title(course.getTitle())

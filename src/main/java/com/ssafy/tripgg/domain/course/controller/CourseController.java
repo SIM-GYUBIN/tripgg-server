@@ -1,6 +1,7 @@
 package com.ssafy.tripgg.domain.course.controller;
 
 import com.ssafy.tripgg.domain.course.dto.CourseRequest;
+import com.ssafy.tripgg.domain.course.dto.response.GPTAdviceResponse;
 import com.ssafy.tripgg.domain.course.dto.response.course_detail.CourseDetailResponse;
 import com.ssafy.tripgg.domain.course.dto.response.course_detail.CourseFinishResponse;
 import com.ssafy.tripgg.domain.course.dto.response.course_list.AllCourseResponse;
@@ -103,5 +104,12 @@ public class CourseController {
 
         Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
         return ApiResponse.success(courseService.finishCourse(userId, courseId));
+    }
+
+    @GetMapping("/{courseId}/gpt")
+    public ApiResponse<GPTAdviceResponse> getWeatherAndGPTAdvice(
+            @PathVariable("courseId") Long courseId) {
+
+        return ApiResponse.success(courseService.getWeatherAndGPTAdvice(courseId));
     }
 }

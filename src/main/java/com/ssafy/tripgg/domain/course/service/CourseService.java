@@ -3,6 +3,8 @@ package com.ssafy.tripgg.domain.course.service;
 import com.ssafy.tripgg.domain.course.dto.CourseRequest;
 import com.ssafy.tripgg.domain.course.dto.query.CourseDetailQuery;
 import com.ssafy.tripgg.domain.course.dto.query.InProgressCourseQuery;
+import com.ssafy.tripgg.domain.course.dto.query.LocAndPlacesQuery;
+import com.ssafy.tripgg.domain.course.dto.response.GPTAdviceResponse;
 import com.ssafy.tripgg.domain.course.dto.response.course_detail.CourseDetailResponse;
 import com.ssafy.tripgg.domain.course.dto.response.course_detail.CourseFinishResponse;
 import com.ssafy.tripgg.domain.course.dto.response.course_list.AllCourseResponse;
@@ -22,6 +24,9 @@ import com.ssafy.tripgg.global.common.CustomPage;
 import com.ssafy.tripgg.global.common.constants.PointConstants;
 import com.ssafy.tripgg.global.error.ErrorCode;
 import com.ssafy.tripgg.global.error.exception.BusinessException;
+import com.ssafy.tripgg.infra.chatgpt.GPTService;
+import com.ssafy.tripgg.infra.weather.dto.WeatherInfoDto;
+import com.ssafy.tripgg.infra.weather.service.WeatherService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +43,9 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class CourseService {
+
+    private final WeatherService weatherService;
+    private final GPTService gptService;
 
     private final CourseRepository courseRepository;
     private final CourseProgressRepository courseProgressRepository;
@@ -172,6 +180,25 @@ public class CourseService {
 
         return CourseFinishResponse.builder()
                 .gainedScore(score)
+                .build();
+    }
+
+    public GPTAdviceResponse getWeatherAndGPTAdvice(Long courseId) {
+        LocAndPlacesQuery locAndPlaces = courseRepository.findLocAndPlacesByCourseId(courseId);
+
+        WeatherInfoDto weatherInfo = weatherService.getCurrentWeather(
+                locAndPlaces.getLatitude(),
+                locAndPlaces.getLongitude()
+        );
+
+        String guide = gptService.generateTravelGuide(
+                weatherInfo,
+                locAndPlaces.getPlaces()
+        );
+
+        return GPTAdviceResponse.builder()
+                .weatherInfo(weatherInfo.toKoreanString())
+                .gptGuide(guide)
                 .build();
     }
 }

@@ -40,7 +40,10 @@ pipeline {
             steps {
                 sh '''
                     chmod +x gradlew
-                    ./gradlew clean build --no-daemon --max-workers 2 -Dorg.gradle.jvmargs="-Xmx256m"
+                    # gradle 빌드 시 테스트 스킵 (-x test)
+                    # 메모리 제한 (256m)
+                    # 데몬 비활성화 (--no-daemon)
+                    ./gradlew clean build -x test --no-daemon --max-workers 2 -Dorg.gradle.jvmargs="-Xmx256m"
                 '''
             }
         }

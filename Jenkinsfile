@@ -51,10 +51,8 @@ pipeline {
                     sh 'docker rm -f ${APP_NAME} || true'
                     sh 'docker rmi ${DOCKER_IMAGE} || true'
 
-                    // Docker 빌드 메모리 제한
                     sh 'docker build --memory=512m --memory-swap=512m -t ${DOCKER_IMAGE} .'
 
-                    // 컨테이너 실행 시 메모리 제한
                     sh '''
                         docker run -d \
                             --name ${APP_NAME} \

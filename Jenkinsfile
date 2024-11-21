@@ -9,8 +9,8 @@ pipeline {
                     file(credentialsId: 'secret-yaml', variable: 'secretFile')
                 ]) {
                     sh '''
-                        cp $prodFile src/main/resources/application-prod.yml
-                        cp $secretFile src/main/resources/application-secret.yml
+                        sudo cp $prodFile src/main/resources/application-prod.yml
+                        sudo cp $secretFile src/main/resources/application-secret.yml
                     '''
                 }
             }

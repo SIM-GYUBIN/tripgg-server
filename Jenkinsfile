@@ -9,8 +9,12 @@ pipeline {
                     file(credentialsId: 'secret-yaml', variable: 'secretFile')
                 ]) {
                     sh '''
-                        sudo cp $prodFile src/main/resources/application-prod.yml
-                        sudo cp $secretFile src/main/resources/application-secret.yml
+                        mkdir -p src/main/resources
+
+                        cp "$prodFile" src/main/resources/application-prod.yml
+                        cp "$secretFile" src/main/resources/application-secret.yml
+
+                        chmod 644 src/main/resources/application-*.yml
                     '''
                 }
             }
@@ -29,10 +33,10 @@ pipeline {
             steps {
                 script {
                     sh 'docker build -t jenkins-test .'
-                    sh 'docker rm -f jenkins-test || true'  // 컨테이너가 없을 경우 에러 방지
+                    sh 'docker rm -f jenkins-test || true'
                     sh 'docker run -d --name jenkins-test -p 8080:8080 jenkins-test'
                 }
             }
         }
-    }  // stages 끝
-}  // pipeline 끝
+    }
+}

@@ -20,6 +20,7 @@ import com.ssafy.tripgg.global.error.ErrorCode;
 import com.ssafy.tripgg.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -63,7 +64,7 @@ public class CourseRepositoryImpl implements CourseCustomRepository {
                                         .where(placeVerification.courseProgress.course.id.eq(courseId)),
                                 "verifiedPlaceNum"
                         ),
-                        place.id,
+                        place.id, // 9
                         place.name,
                         place.description,
                         place.latitude,
@@ -71,7 +72,7 @@ public class CourseRepositoryImpl implements CourseCustomRepository {
                         place.address,
                         place.imageUrl,
                         courseProgress.status,
-                        placeVerification.id.isNotNull().as("isVerified"),
+                        placeVerification.id.isNotNull().as("isVerified"), //17
                         placeVerification.photoVerified
                 )
                 .from(course)
@@ -107,6 +108,7 @@ public class CourseRepositoryImpl implements CourseCustomRepository {
                         .address(row.get(14, String.class))    // place.address
                         .imageUrl(ImageUtils.checkImageUrl(row.get(15, String.class)))   // place.imageUrl
                         .sequence(row.get(6, Integer.class))   // coursePlace.sequence
+                        .canPhotoVerify(!StringUtils.hasText(row.get(15, String.class)))// imageUrl이 null인지 확인
                         .isVerified(Boolean.TRUE.equals(row.get(17, Boolean.class)))  // isVerified
                         .isPhotoVerified(Boolean.TRUE.equals(row.get(18, Boolean.class))) // photoVerified
                         .build())

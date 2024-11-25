@@ -90,7 +90,7 @@ public class VerificationService {
         return VerificationConstants.EARTH_RADIUS * c;  // 미터 단위로 반환
     }
 
-    public void verifyImage(Long userId, Long courseId, Long placeId, MultipartFile userImage) {
+    public String verifyImage(Long userId, Long courseId, Long placeId, MultipartFile userImage) {
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PLACE_NOT_FOUND));
 
@@ -110,14 +110,16 @@ public class VerificationService {
 
             ApickApiResponse response = imageSimilarityApiClient.compareImages(baseImage, List.of(userImage));
 
-            log.info("similarity: {}", response.getData().getOutput().get("compare_image1"));
+            Double similarity = response.getData().getOutput().get("compare_image1");
 
-            if (response.getData().getSuccess() == 1 && response.getData().getOutput().get("compare_image1") >= VerificationConstants.SIMILARITY_THRESHOLD) {
+            if (response.getData().getSuccess() == 1 && similarity >= VerificationConstants.SIMILARITY_THRESHOLD) {
                 String imageUrl = s3ObjectStorage.uploadFile(userImage);
                 verification.photoVerify(imageUrl);
             } else {
                 throw new BusinessException(ErrorCode.PHOTO_VERIFY_FAILED);
             }
+
+            return similarity.toString();
 
         } catch (BusinessException e) {
             throw e;

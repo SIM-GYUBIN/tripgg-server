@@ -40,7 +40,7 @@ public class VerificationController {
             @RequestParam("photo") MultipartFile photo) {
 
         Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
-        verificationService.verifyImage(userId, courseId, placeId, photo);
-        return ApiResponse.success("이미지 인증 성공");
+        String similarity = verificationService.verifyImage(userId, courseId, placeId, photo);
+        return ApiResponse.success("이미지 인증 성공 (유사도: "+similarity+")");
     }
 }

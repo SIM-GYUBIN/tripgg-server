@@ -37,10 +37,10 @@ public class VerificationController {
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable Long courseId,
             @PathVariable Long placeId,
-            @RequestParam("image") MultipartFile image) {
+            @RequestParam("photo") MultipartFile photo) {
 
         Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
-        verificationService.verifyImage(userId, courseId, placeId, image);
+        verificationService.verifyImage(userId, courseId, placeId, photo);
         return ApiResponse.success("이미지 인증 성공");
     }
 }

@@ -56,4 +56,11 @@ public class ImageUtils {
             default -> "application/octet-stream";
         };
     }
+
+    public static String checkImageUrl(String imageUrl) {
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            return "https://tripgg-bucket.s3.ap-northeast-2.amazonaws.com/noneImage.jpg";
+        }
+        return imageUrl;
+    }
 }

@@ -15,6 +15,7 @@ import com.ssafy.tripgg.domain.course.entity.enums.ProgressStatus;
 import com.ssafy.tripgg.domain.course.entity.enums.Region;
 import com.ssafy.tripgg.domain.place.entity.QPlace;
 import com.ssafy.tripgg.domain.verification.entity.QPlaceVerification;
+import com.ssafy.tripgg.global.common.util.ImageUtils;
 import com.ssafy.tripgg.global.error.ErrorCode;
 import com.ssafy.tripgg.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -104,7 +105,7 @@ public class CourseRepositoryImpl implements CourseCustomRepository {
                         .latitude(row.get(12, BigDecimal.class))   // place.latitude
                         .longitude(row.get(13, BigDecimal.class))  // place.longitude
                         .address(row.get(14, String.class))    // place.address
-                        .imageUrl(row.get(15, String.class))   // place.imageUrl
+                        .imageUrl(ImageUtils.checkImageUrl(row.get(15, String.class)))   // place.imageUrl
                         .sequence(row.get(6, Integer.class))   // coursePlace.sequence
                         .isVerified(Boolean.TRUE.equals(row.get(17, Boolean.class)))  // isVerified
                         .isPhotoVerified(Boolean.TRUE.equals(row.get(18, Boolean.class))) // photoVerified

@@ -32,7 +32,7 @@ public class VerificationController {
         return ApiResponse.success("GPS 인증 성공");
     }
 
-    @PostMapping("/image/courses/{courseId}/places/{placeId}")
+    @PostMapping("/photo/courses/{courseId}/places/{placeId}")
     public ApiResponse<String> verifyImage(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable Long courseId,

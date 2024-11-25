@@ -108,7 +108,7 @@ public class CourseRepositoryImpl implements CourseCustomRepository {
                         .address(row.get(14, String.class))    // place.address
                         .imageUrl(ImageUtils.checkImageUrl(row.get(15, String.class)))   // place.imageUrl
                         .sequence(row.get(6, Integer.class))   // coursePlace.sequence
-                        .canPhotoVerify(!StringUtils.hasText(row.get(15, String.class)))// imageUrl이 null인지 확인
+                        .canPhotoVerify(StringUtils.hasText(row.get(15, String.class)))// imageUrl이 null인지 확인
                         .isVerified(Boolean.TRUE.equals(row.get(17, Boolean.class)))  // isVerified
                         .isPhotoVerified(Boolean.TRUE.equals(row.get(18, Boolean.class))) // photoVerified
                         .build())

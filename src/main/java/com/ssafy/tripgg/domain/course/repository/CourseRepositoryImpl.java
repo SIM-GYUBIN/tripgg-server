@@ -61,7 +61,8 @@ public class CourseRepositoryImpl implements CourseCustomRepository {
                                 JPAExpressions
                                         .select(placeVerification.count())
                                         .from(placeVerification)
-                                        .where(placeVerification.courseProgress.course.id.eq(courseId)),
+                                        .where(placeVerification.courseProgress.course.id.eq(courseId)
+                                                .and(placeVerification.courseProgress.user.id.eq(userId))),
                                 "verifiedPlaceNum"
                         ),
                         place.id, // 9
@@ -128,7 +129,6 @@ public class CourseRepositoryImpl implements CourseCustomRepository {
                 .updatedAt(firstRow.get(5, LocalDateTime.class))  // course.updatedAt
                 .build();
     }
-
 
 
     @Override

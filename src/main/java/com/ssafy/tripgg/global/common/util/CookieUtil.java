@@ -10,7 +10,7 @@ public class CookieUtil {
     public static ResponseCookie createAccessTokenCookie(String token) {
 
         return ResponseCookie.from(TOKEN_NAME, token)
-                .httpOnly(true)
+                .httpOnly(false)
                 .secure(true)
                 .sameSite("None")
                 .path("/")

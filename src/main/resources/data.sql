@@ -4512,3 +4512,13 @@ INSERT INTO course_places (id, course_id, place_id, sequence)
 VALUES (597, 141, 274, 3);
 INSERT INTO course_places (id, course_id, place_id, sequence)
 VALUES (598, 141, 488, 4);
+
+# 테스트 데이터
+INSERT INTO places (id, name, description, latitude, longitude, image_url, address, region_id, phone_number, created_at, updated_at)
+VALUES (586, 'SSAFY 103호', 'SSAFY 대전 6반의 강의실이다.',
+        36.35527464, 127.29825523,
+        'https://tripgg-bucket.s3.ap-northeast-2.amazonaws.com/ssafy.jpg', '대전광역시 유성구 덕명동 124', 3, NULL, NOW(), NOW());
+INSERT INTO courses (id, title, description, region_id, thumbnail_url, created_at, updated_at)
+VALUES (142, 'SSAFY 대전 여행', 'SSAFY 대전 6반은 어디서 공부할까?', 3, 'https://tripgg-bucket.s3.ap-northeast-2.amazonaws.com/ssafy.jpg', NOW(), NOW());
+INSERT INTO course_places (id, course_id, place_id, sequence)
+VALUES (599, 142, 586, 1);

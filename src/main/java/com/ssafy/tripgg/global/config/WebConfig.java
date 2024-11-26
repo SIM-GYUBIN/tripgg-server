@@ -19,7 +19,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 .allowedOrigins(frontUrl)
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-                .allowedHeaders("Authorization", "Content-Type", "X-Requested-With")
+                .allowedHeaders("Authorization", "Content-Type", "X-Requested-With",
+                        "Access-Control-Allow-Credentials", "Access-Control-Allow-Origin",
+                        "Accept", "Origin", "Cookie", "Set-Cookie")  // 헤더 추가
+                .exposedHeaders("Set-Cookie")  // 쿠키 노출 허용
                 .allowCredentials(true)
                 .maxAge(3600);
     }

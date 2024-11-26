@@ -1,6 +1,5 @@
 package com.ssafy.tripgg.global.config.security;
 
-import com.nimbusds.jwt.JWT;
 import com.ssafy.tripgg.global.config.jwt.JwtAuthenticationFilter;
 import com.ssafy.tripgg.global.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -60,7 +59,12 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Collections.singletonList(frontUrl));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Authorization", "Content-Type", "X-Requested-With",
+                "Access-Control-Allow-Credentials", "Access-Control-Allow-Origin",
+                "Accept", "Origin", "Cookie", "Set-Cookie"
+        ));
+        configuration.setExposedHeaders(Arrays.asList("Set-Cookie"));  // 쿠키 노출 허용
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 

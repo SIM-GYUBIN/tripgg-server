@@ -8,6 +8,7 @@ import com.ssafy.tripgg.domain.verification.dto.ApickApiResponse;
 import com.ssafy.tripgg.domain.verification.dto.LocationRequest;
 import com.ssafy.tripgg.domain.verification.entity.PlaceVerification;
 import com.ssafy.tripgg.domain.verification.repository.PlaceVerificationRepository;
+import com.ssafy.tripgg.global.common.util.GeoUtils;
 import com.ssafy.tripgg.global.common.util.ImageUtils;
 import com.ssafy.tripgg.global.error.ErrorCode;
 import com.ssafy.tripgg.global.error.exception.BusinessException;
@@ -52,7 +53,8 @@ public class VerificationService {
         }
 
         // place의 위도, 경도와 location의 위도, 경도를 비교하여 일정 범위 내에 있는지 확인한다.
-        validateLocation(place, userLocation);
+
+        validateLocationInRange(place, userLocation);
 
         PlaceVerification verification = PlaceVerification.builder()
                 .courseProgress(courseProgress)
@@ -64,31 +66,18 @@ public class VerificationService {
         placeVerificationRepository.save(verification);
     }
 
-
-    private void validateLocation(Place place, LocationRequest userLocation) {
-        double distance = calculateDistance(
+    private void validateLocationInRange(Place place, LocationRequest userLocation) {
+        double distance = GeoUtils.calculateDistance(
                 place.getLatitude().doubleValue(),
                 place.getLongitude().doubleValue(),
                 userLocation.getLatitude().doubleValue(),
                 userLocation.getLongitude().doubleValue());
 
-        if (distance > VerificationConstants.MAX_DISTANCE) {  // 50미터
+        if (distance > VerificationConstants.MAX_DISTANCE) {
             throw new BusinessException(ErrorCode.INVALID_LOCATION);
         }
     }
 
-    public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
-
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(Math.toRadians(lat1)) *
-                        Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return VerificationConstants.EARTH_RADIUS * c;  // 미터 단위로 반환
-    }
 
     public String verifyImage(Long userId, Long courseId, Long placeId, MultipartFile userImage) {
         Place place = placeRepository.findById(placeId)

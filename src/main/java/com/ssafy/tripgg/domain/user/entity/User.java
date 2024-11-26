@@ -6,11 +6,17 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE users SET deleted_at = NOW() WHERE id = ?")
+@SQLRestriction("deleted_at IS NULL")
 public class User extends BaseEntity {
 
     @Column(nullable = false, length = 50)
@@ -29,6 +35,9 @@ public class User extends BaseEntity {
     @Column(name = "total_points")
     private Integer totalPoints;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     @Builder
     public User(String nickname, Provider provider, String providerId,
                 String profileImageUrl) {
@@ -41,5 +50,9 @@ public class User extends BaseEntity {
 
     public void addPoints(int points) {
         this.totalPoints += points;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
     }
 }

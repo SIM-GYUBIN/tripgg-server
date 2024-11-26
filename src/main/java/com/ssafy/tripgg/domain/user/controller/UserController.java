@@ -25,7 +25,7 @@ public class UserController {
     @DeleteMapping("/me")
     public ApiResponse<String> deleteUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
-        userService.deleteById(userId);
+        userService.softDelete(userId);
 
         return ApiResponse.success("회원 탈퇴가 완료되었습니다.");
     }

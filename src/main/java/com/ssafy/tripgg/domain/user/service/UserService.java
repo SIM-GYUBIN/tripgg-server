@@ -22,7 +22,9 @@ public class UserService {
         return UserResponse.of(user);
     }
 
-    public void deleteById(Long userId) {
-        userRepository.deleteById(userId);
+    public void softDelete(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
+        user.delete();
     }
 }

@@ -32,15 +32,15 @@ public class VerificationController {
         return ApiResponse.success("GPS 인증 성공");
     }
 
-    @PostMapping("/image/courses/{courseId}/places/{placeId}")
+    @PostMapping("/photo/courses/{courseId}/places/{placeId}")
     public ApiResponse<String> verifyImage(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @PathVariable Long courseId,
             @PathVariable Long placeId,
-            @RequestParam("image") MultipartFile image) {
+            @RequestParam("photo") MultipartFile photo) {
 
         Long userId = AuthenticationUtil.getCurrentUserId(userPrincipal);
-        verificationService.verifyImage(userId, courseId, placeId, image);
-        return ApiResponse.success("이미지 인증 성공");
+        String similarity = verificationService.verifyImage(userId, courseId, placeId, photo);
+        return ApiResponse.success("이미지 인증 성공 (유사도: "+similarity+")");
     }
 }

@@ -16,6 +16,7 @@ public class PlaceResponse {
     String address;
     String imageUrl;
     Integer sequence;
+    boolean canPhotoVerify;
     boolean isVerified;
     boolean isPhotoVerified;
 }

@@ -62,6 +62,7 @@ public class CourseService {
         };
 
         Page<AllCourseResponse> allCourseResponses = courses.map(AllCourseResponse::of);
+        log.info("thumbnail : {}", allCourseResponses.getContent().get(0).getThumbnailUrl());
         return new CustomPage<>(allCourseResponses);
     }
 

@@ -19,6 +19,8 @@ public class ImageUtils {
 
     private final OkHttpClient okHttpClient;
 
+    private static final String DEFAULT_IMAGE_URL = "https://tripgg-bucket.s3.ap-northeast-2.amazonaws.com/noneImage.jpg";
+
     public MultipartFile urlToMultipartFile(String imageUrl) {
         try {
             Request request = new Request.Builder()
@@ -55,5 +57,12 @@ public class ImageUtils {
             case "gif" -> "image/gif";
             default -> "application/octet-stream";
         };
+    }
+
+    public static String checkImageUrl(String imageUrl) {
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            return DEFAULT_IMAGE_URL;
+        }
+        return imageUrl;
     }
 }

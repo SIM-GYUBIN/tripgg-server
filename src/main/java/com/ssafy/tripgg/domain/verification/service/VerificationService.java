@@ -8,6 +8,7 @@ import com.ssafy.tripgg.domain.verification.dto.ApickApiResponse;
 import com.ssafy.tripgg.domain.verification.dto.LocationRequest;
 import com.ssafy.tripgg.domain.verification.entity.PlaceVerification;
 import com.ssafy.tripgg.domain.verification.repository.PlaceVerificationRepository;
+import com.ssafy.tripgg.global.common.util.GeoUtils;
 import com.ssafy.tripgg.global.common.util.ImageUtils;
 import com.ssafy.tripgg.global.error.ErrorCode;
 import com.ssafy.tripgg.global.error.exception.BusinessException;
@@ -52,7 +53,8 @@ public class VerificationService {
         }
 
         // place의 위도, 경도와 location의 위도, 경도를 비교하여 일정 범위 내에 있는지 확인한다.
-        validateLocation(place, userLocation);
+
+        validateLocationInRange(place, userLocation);
 
         PlaceVerification verification = PlaceVerification.builder()
                 .courseProgress(courseProgress)
@@ -64,33 +66,20 @@ public class VerificationService {
         placeVerificationRepository.save(verification);
     }
 
-
-    private void validateLocation(Place place, LocationRequest userLocation) {
-        double distance = calculateDistance(
+    private void validateLocationInRange(Place place, LocationRequest userLocation) {
+        double distance = GeoUtils.calculateDistance(
                 place.getLatitude().doubleValue(),
                 place.getLongitude().doubleValue(),
                 userLocation.getLatitude().doubleValue(),
                 userLocation.getLongitude().doubleValue());
 
-        if (distance > VerificationConstants.MAX_DISTANCE) {  // 50미터
+        if (distance > VerificationConstants.MAX_DISTANCE) {
             throw new BusinessException(ErrorCode.INVALID_LOCATION);
         }
     }
 
-    public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
 
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(Math.toRadians(lat1)) *
-                        Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return VerificationConstants.EARTH_RADIUS * c;  // 미터 단위로 반환
-    }
-
-    public void verifyImage(Long userId, Long courseId, Long placeId, MultipartFile userImage) {
+    public String verifyImage(Long userId, Long courseId, Long placeId, MultipartFile userImage) {
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.PLACE_NOT_FOUND));
 
@@ -110,14 +99,16 @@ public class VerificationService {
 
             ApickApiResponse response = imageSimilarityApiClient.compareImages(baseImage, List.of(userImage));
 
-            log.info("similarity: {}", response.getData().getOutput().get("compare_image1"));
+            Double similarity = response.getData().getOutput().get("compare_image1");
 
-            if (response.getData().getSuccess() == 1 && response.getData().getOutput().get("compare_image1") >= VerificationConstants.SIMILARITY_THRESHOLD) {
+            if (response.getData().getSuccess() == 1 && similarity >= VerificationConstants.SIMILARITY_THRESHOLD) {
                 String imageUrl = s3ObjectStorage.uploadFile(userImage);
                 verification.photoVerify(imageUrl);
             } else {
                 throw new BusinessException(ErrorCode.PHOTO_VERIFY_FAILED);
             }
+
+            return similarity.toString();
 
         } catch (BusinessException e) {
             throw e;

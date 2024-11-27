@@ -101,6 +101,10 @@ public class VerificationService {
 
             Double similarity = response.getData().getOutput().get("compare_image1");
 
+            log.info("UserId: {}", userId);
+            log.info("PlaceId: {}", placeId);
+            log.info("Similarity: {}", similarity);
+
             if (response.getData().getSuccess() == 1 && similarity >= VerificationConstants.SIMILARITY_THRESHOLD) {
                 String imageUrl = s3ObjectStorage.uploadFile(userImage);
                 verification.photoVerify(imageUrl);

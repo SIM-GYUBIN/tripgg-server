@@ -27,6 +27,15 @@ https://tripggukgguk.site
 </tr>
 </table>
 
+- 다양한 기준으로 코스를 조회할 수 있습니다.
+  - 지역별 조회
+  - 로그인 시 미도전, 도전 중, 완료 코스 목록 조회
+  - 최신순, 인기순 정렬
+ 
+- 소셜 로그인으로 별도 회원가입 없이 즉시 이용 가능합니다.
+ 
+- 해당 코스의 날씨 정보와 관광지 정보를 종합하여 GPT가 여행 가이드를 제공합니다. 
+
 <table>  
 <tr>
 <td align="center"><b>GPS 인증</b></td>
@@ -39,6 +48,12 @@ https://tripggukgguk.site
 <td><img src="https://github.com/user-attachments/assets/79504e56-9918-484b-8e1a-f879f82a5097" width="250px"></td>
 </tr>
 </table>
+
+- GPS 인증 시 10점, 사진 인증 시 보너스 20점을 코스 완주 시 획득 가능합니다.
+
+- 사용자가 관광지의 좌표와 근접하면 GPS 인증이 성공합니다. (반경 100m)
+
+- 관광지 예시사진과 유사한 구도에서 사진을 찍어 사진인증이 가능합니다. (AI 이미지 유사도 분석으로 판단)
 
 ## 🚎 Architecture
 ![system-architecture](https://github.com/user-attachments/assets/44e28019-57a5-4da9-8aa1-bfabe3706412)

@@ -3,7 +3,7 @@
 
 <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FSIM-GYUBIN%2Ftripgg-server&count_bg=%23E53610&title_bg=%23040404&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false"/></a>
 
-https://tripggukgguk.site
+~~https://tripggukgguk.site~~
 
 </div>
 
